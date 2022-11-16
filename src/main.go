@@ -16,6 +16,7 @@ const (
 )
 
 func dumpRequest(w http.ResponseWriter, req *http.Request) {
+	// Adding comment to generate a push
 	var formatted, err = httputil.DumpRequest(req, true)
 
 	if err != nil {
