@@ -5,6 +5,7 @@ pipeline {
         stage('Go : Download modules') {
           steps {
             dir("${env.WORKSPACE}/src"){
+              sh 'go version'
               sh 'go mod download'
               sh 'go get'
             }
