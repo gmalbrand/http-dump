@@ -1,5 +1,6 @@
 prepare:
 	go mod download
+	go get
 
 build:
 	go build -o http-dump main.go

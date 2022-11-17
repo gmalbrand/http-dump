@@ -6,6 +6,7 @@ pipeline {
           steps {
             dir("${env.WORKSPACE}/src"){
               sh 'go mod download'
+              sh 'go get'
             }
           }
         }
