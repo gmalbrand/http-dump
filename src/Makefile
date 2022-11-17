@@ -1,3 +1,6 @@
+prepare:
+	go mod download
+
 build:
 	go build -o http-dump main.go
 
@@ -7,4 +10,4 @@ run:
 clean:
 	rm -rf http-dump
 
-all: run
+all: prepare run
