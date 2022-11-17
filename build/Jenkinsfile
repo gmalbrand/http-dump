@@ -2,10 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('This my stage') {
-            steps {
-              sh 'echo "this a step"'
+        stage('Go : Download modules') {
+          steps {
+            dir("${env.WORKSPACE}/src"){
+              sh 'go mod download'
             }
+          }
+        }
+        stage('Go : build executable') {
+          steps{
+            dir("${env.WORKSPACE}/src"){
+              sh 'go build -o http-dump main.go'
+            }
+          }
+        }
+        stage('List files') {
+          steps {
+              sh 'echo $PWD'
+              sh 'echo "$(ls -lR)"'
+          }
         }
     }
 }
