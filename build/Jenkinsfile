@@ -11,14 +11,14 @@ pipeline {
             }
           }
         }
-        stage('Go : build executable') {
+        stage('Go : Build executable') {
           steps{
             dir("${env.WORKSPACE}/src"){
               sh 'go build -o http-dump main.go'
             }
           }
         }
-        stage('List files') {
+        stage('Env : List environment variables') {
           steps {
               sh 'echo $PWD'
               sh 'printenv'
