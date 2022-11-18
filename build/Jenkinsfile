@@ -21,7 +21,7 @@ pipeline {
         stage('List files') {
           steps {
               sh 'echo $PWD'
-              sh 'echo "$(ls -lR)"'
+              sh 'printenv'
           }
         }
     }
