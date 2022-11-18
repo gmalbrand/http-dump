@@ -1,15 +1,13 @@
 pipeline {
     agent any
-    environment {
-      PATH = "/usr/local/go/bin:${env.PATH}"
+    tools {
+      go 'go-1.19.3'
     }
     stages {
         stage('Go : Download modules') {
           steps {
             dir("${env.WORKSPACE}/src"){
-              sh 'go version'
               sh 'go mod download'
-              sh 'go get'
             }
           }
         }
