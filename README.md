@@ -14,7 +14,6 @@ curl -s http://localhost:8080/info
 ```
 
 ## Dump
-
 /dump endpoint just dump incoming request in the response
 ```
 curl -s http://localhost:8080/dump
