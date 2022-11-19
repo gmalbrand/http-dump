@@ -27,7 +27,7 @@ func dumpRequest(w http.ResponseWriter, req *http.Request) {
 
 func info(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "{\"api\": \"http-dump\"}")
+	fmt.Fprintf(w, "{\"api\": \"http-dump\", \"version\": 1.0.0}")
 }
 
 func main() {
