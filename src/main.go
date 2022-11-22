@@ -26,6 +26,7 @@ func dumpRequest(w http.ResponseWriter, req *http.Request) {
 }
 
 func info(w http.ResponseWriter, req *http.Request) {
+	// Printing info message (need to update the version at build time)
 	w.Header().Set("Content-Type", "application/json")
 	fmt.Fprintf(w, "{\"api\": \"http-dump\", \"version\": 1.0.0}")
 }
