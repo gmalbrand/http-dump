@@ -33,7 +33,6 @@ func info(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	// Get parameters
-	// Et ca continue encore et encore
 	port, err := strconv.Atoi(os.Getenv("HTTP_SERVER_PORT"))
 
 	if err != nil {
