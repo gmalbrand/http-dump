@@ -9,7 +9,6 @@ pipeline {
             dir("${env.WORKSPACE}/src"){
               sh 'go mod download'
             }
-            logstashSend failBuild: false, maxLines: 1000
           }
         }
         stage('Go : Build executable') {
@@ -17,7 +16,6 @@ pipeline {
             dir("${env.WORKSPACE}/src"){
               sh 'go build -o http-dump main.go'
             }
-            logstashSend failBuild: false, maxLines: 1000
           }
         }
         stage('Env : List environment variables') {
@@ -26,5 +24,6 @@ pipeline {
               sh 'printenv'
           }
         }
+        logstashSend failBuild: false, maxLines: 1000
     }
 }
