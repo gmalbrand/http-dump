@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'go' }
     tools {
       go 'go-1.19.3'
     }
