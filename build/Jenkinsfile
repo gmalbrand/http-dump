@@ -26,7 +26,7 @@ pipeline {
       stages {
         stage('Build image') {
           steps {
-              sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER -t $IMAGE_NAME:latest -f build/Dockerfile .' 
+              sh 'docker build -t $REPOSITORY:$BUILD_NUMBER -t $REPOSITORY:latest -f build/Dockerfile .' 
           }
         }
         
@@ -35,15 +35,15 @@ pipeline {
               withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'docker_pwd', usernameVariable: 'docker_user')]) {
                   sh 'docker login -u $docker_user -p $docker_pwd'
               }
-              sh 'docker push $IMAGE_NAME --all-tags'
+              sh 'docker push $REPOSITORY --all-tags'
               sh 'docker logout'
           }
         }
 
         stage('Cleaning repository') {
           steps {
-              sh 'docker rmi $IMAGE_NAME:latest'
-              sh 'docker rmi $IMAGE_NAME:$BUILD_NUMBER'
+              sh 'docker rmi $REPOSITORY:latest'
+              sh 'docker rmi $REPOSITORY:$BUILD_NUMBER'
           }
         }
       }
