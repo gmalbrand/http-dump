@@ -27,7 +27,7 @@ pipeline {
             label 'docker'
           }
           steps {
-            sh 'echo $CREDENTIALS_PWD | docker login -u $CREDENTIALS_USR --password-stdin'
+            sh 'docker login -u $CREDENTIALS_USR --password-stdin -p $CREDENTIALS_PSW'
             sh 'docker build -t $REPOSITORY:$BUILD_NUMBER .'
           }
         }
