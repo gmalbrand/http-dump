@@ -1,27 +1,19 @@
 pipeline {
-    agent { label 'go' }
-    tools {
-      go 'go-1.19.3'
-    }
+    agent none
+
     stages {
         stage('Go : Download modules') {
+          agent {
+            docker {
+              label 'docker'
+              image 'golang:1.19.3-alpine'
+            }
+          }
           steps {
             dir("${env.WORKSPACE}/src"){
               sh 'go mod download'
-            }
-          }
-        }
-        stage('Go : Build executable') {
-          steps{
-            dir("${env.WORKSPACE}/src"){
               sh 'go build -o http-dump main.go'
             }
-          }
-        }
-        stage('Env : List environment variables') {
-          steps {
-              sh 'echo $PWD'
-              sh 'printenv'
           }
         }
     }
