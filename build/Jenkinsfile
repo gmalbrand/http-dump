@@ -1,6 +1,11 @@
 pipeline {
     agent none
 
+    environment {
+      REPOSITORY='gmalbrand/http-dump'
+      CREDENTIALS=credentials('dockerhub-credentials')
+    }
+
     stages {
         stage('Build & Tests') {
           agent {
@@ -14,6 +19,16 @@ pipeline {
             dir("${env.WORKSPACE}/src"){
               sh 'go build -o http-dump main.go'
             }
+          }
+        }
+
+        stage('Publish image'){
+          agent {
+            label 'docker'
+          }
+          steps {
+            sh 'echo $CREDENTIALS_PWD | docker login -u $CREDENTIALS_USR --password-stdin'
+            sh 'docker build -t $REPOSITORY:$BUILD_NUMBER .'
           }
         }
     }
