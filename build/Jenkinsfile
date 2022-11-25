@@ -2,7 +2,7 @@ pipeline {
     agent none
 
     stages {
-        stage('Go : Download modules') {
+        stage('Build & Tests') {
           agent {
             docker {
               label 'docker'
@@ -11,7 +11,6 @@ pipeline {
           }
           steps {
             dir("${env.WORKSPACE}/src"){
-              sh 'go mod download'
               sh 'go build -o http-dump main.go'
             }
           }
