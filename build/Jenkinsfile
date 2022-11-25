@@ -1,38 +1,52 @@
 pipeline {
-    agent none
+  agent none
 
-    environment {
-      REPOSITORY='gmalbrand/http-dump'
-      CREDENTIALS=credentials('dockerhub-credentials')
+  environment {
+    REPOSITORY='gmalbrand/http-dump'
+  }
+
+  stages {
+    stage('Build & Tests') {
+      agent {
+        docker {
+          label 'docker'
+          image 'golang:1.19.3-alpine'
+          args '-e GOCACHE=/tmp'
+        }
+      }
+      steps {
+        dir("${env.WORKSPACE}/src"){
+          sh 'go build -o http-dump main.go'
+        }
+      }
     }
-
-    stages {
-      /*
-        Comment section
-      */
-        stage('Build & Tests') {
-          agent {
-            docker {
-              label 'docker'
-              image 'golang:1.19.3-alpine'
-              args '-e GOCACHE=/tmp'
-            }
-          }
+     
+    stage('Publishing to dockerhub'){
+      agent {label 'docker'}
+      stages {
+        stage('Build image') {
           steps {
-            dir("${env.WORKSPACE}/src"){
-              sh 'go build -o http-dump main.go'
-            }
+              sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER -t $IMAGE_NAME:latest -f build/Dockerfile .' 
+          }
+        }
+        
+        stage('Push image') {
+          steps {
+              withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'docker_pwd', usernameVariable: 'docker_user')]) {
+                  sh 'docker login -u $docker_user -p $docker_pwd'
+              }
+              sh 'docker push $IMAGE_NAME --all-tags'
+              sh 'docker logout'
           }
         }
 
-        stage('Publish image'){
-          agent {
-            label 'docker'
-          }
+        stage('Cleaning repository') {
           steps {
-            sh 'echo $CREDENTIALS_PSW | docker login -u $CREDENTIALS_USR --password-stdin'
-            sh 'docker build -t $REPOSITORY:$BUILD_NUMBER -f build/Dockerfile .'
+              sh 'docker rmi $IMAGE_NAME:latest'
+              sh 'docker rmi $IMAGE_NAME:$BUILD_NUMBER'
           }
         }
+      }
     }
+  }
 }
