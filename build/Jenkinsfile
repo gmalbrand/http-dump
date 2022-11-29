@@ -18,6 +18,7 @@ pipeline {
         dir("${env.WORKSPACE}/src"){
           sh 'go build -o http-dump main.go'
         }
+        sh 'uname -a'
         sh 'printenv'
       }
 
