@@ -31,7 +31,7 @@ pipeline {
                   sh 'docker login -u $docker_user -p $docker_pwd'
               }
               sh 'export GIT_TAG=$(git tag)'
-              sh 'docker buildx --push -t "$REPOSITORY:$GIT_TAG.$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
+              sh 'docker buildx build --push -t "$REPOSITORY:$GIT_TAG.$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
               sh 'docker logout'
           }
         }
