@@ -25,7 +25,7 @@ pipeline {
 
     stage('Tagging Version'){
       agent {label 'docker'}
-      step {
+      steps {
         withCredentials([string(credentialsId: 'gmalbrand-git-token', variable: 'gittoken')]) {
           sh 'export BRANCH_TAG=$(git describe --tags)'
           sh 'echo old tag $BRANCH_TAG'
