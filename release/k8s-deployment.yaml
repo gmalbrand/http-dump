@@ -19,7 +19,9 @@ spec:
         prometheus.io/port:   '8080'
         prometheus.io/app-metrics: 'true'
         prometheus.io/app-metrics-path: '/metrics'
+        k8s.monitor.config.scalyr.com/scrape: 'true'
         log.config.scalyr.com/attributes.parser: accessLog
+        k8s.monitor.config.scalyr.com/scrape_interval: '5'
     spec:
       containers:
       - image: gmalbrand/http-dump:latest
