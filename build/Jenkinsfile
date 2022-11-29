@@ -18,26 +18,27 @@ pipeline {
         dir("${env.WORKSPACE}/src"){
           sh 'go build -o http-dump main.go'
         }
-        sh 'uname -a'
-        sh 'printenv'
       }
 
     }
-    /*
+    
     stage('Publishing to dockerhub'){
       agent {label 'docker'}
       stages {
-        stage('Build image') {
-          steps {
-              sh 'docker build -t $REPOSITORY:$BUILD_NUMBER -t $REPOSITORY:latest -f build/Dockerfile .' 
-          }
-        }
-        
-        stage('Push image') {
+        stage('Build multi arch image') {
           steps {
               withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'docker_pwd', usernameVariable: 'docker_user')]) {
                   sh 'docker login -u $docker_user -p $docker_pwd'
               }
+              sh 'export GIT_TAG=$(git tag)'
+              sh 'docker buildx --push -t "$REPOSITORY:$GIT_TAG.$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
+              sh 'docker logout'
+          }
+        }
+        /*
+        stage('Push image') {
+          steps {
+              
               sh 'docker push $REPOSITORY --all-tags'
               sh 'docker logout'
           }
@@ -49,9 +50,10 @@ pipeline {
               sh 'docker rmi $REPOSITORY:$BUILD_NUMBER'
           }
         }
+        */
       }
     }
-    */
+
   }
   post {
       always{

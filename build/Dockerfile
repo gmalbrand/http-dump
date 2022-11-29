@@ -13,7 +13,6 @@ RUN go build -o /http-dump
 
 ## Deploy
 FROM gcr.io/distroless/base-debian11
-
 WORKDIR /
 
 COPY --from=build /http-dump /htt-dump

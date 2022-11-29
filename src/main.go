@@ -13,6 +13,11 @@ import (
 
 const (
 	httpDefaultPort = 8080
+	defaultVersion = "v1.0.0"
+)
+
+var (
+	version = os.Getenv("HTTP_DUMP_VERSION")
 )
 
 func dumpRequest(w http.ResponseWriter, req *http.Request) {
@@ -28,15 +33,19 @@ func dumpRequest(w http.ResponseWriter, req *http.Request) {
 func info(w http.ResponseWriter, req *http.Request) {
 	// Printing info message (need to update the version at build time)
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "{\"api\": \"http-dump\", \"version\": 1.0.0}")
+	fmt.Fprintf(w, "{\"api\": \"http-dump\", \"version\": \"%s\"}", version)
 }
 
 func main() {
 	// Get parameters
 	port, err := strconv.Atoi(os.Getenv("HTTP_SERVER_PORT"))
-
+	
 	if err != nil {
 		port = httpDefaultPort
+	}
+
+	if version == "" {
+		version = defaultVersion
 	}
 
 	mux := monitoring.NewMonitoredMux()
