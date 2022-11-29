@@ -17,11 +17,12 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}/src"){
           sh 'go build -o http-dump main.go'
+          sh 'printenv'
         }
       }
 
     }
-    
+    /*
     stage('Publishing to dockerhub'){
       agent {label 'docker'}
       stages {
@@ -35,7 +36,7 @@ pipeline {
               sh 'docker logout'
           }
         }
-        /*
+        
         stage('Push image') {
           steps {
               
@@ -50,10 +51,10 @@ pipeline {
               sh 'docker rmi $REPOSITORY:$BUILD_NUMBER'
           }
         }
-        */
+        
       }
     }
-
+    */
   }
   post {
       always{
