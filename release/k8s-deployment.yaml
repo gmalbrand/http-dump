@@ -22,9 +22,9 @@ spec:
         log.config.scalyr.com/attributes.parser: accessLog
     spec:
       containers:
-      - image: http-dump:1.0.0
+      - image: gmalbrand/http-dump:latest
         name: http-dump
-        imagePullPolicy: Never
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
           protocol: TCP

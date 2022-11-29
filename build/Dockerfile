@@ -22,4 +22,4 @@ EXPOSE 8080
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/htt-dump-server"]
+ENTRYPOINT ["/htt-dump"]
