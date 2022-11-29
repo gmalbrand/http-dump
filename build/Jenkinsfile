@@ -22,6 +22,18 @@ pipeline {
       }
 
     }
+
+    stage('Tagging Version'){
+      agent {label 'docker'}
+      step {
+        withCredentials([string(credentialsId: 'gmalbrand-git-token', variable: 'gittoken')]) {
+          sh 'export BRANCH_TAG=$(git describe --tags)'
+          sh 'echo old tag $BRANCH_TAG'
+          sh 'echo $BRANCH_TAG | sed "s/[0-9]+$/$BUILD_NUMBER/"'
+        }
+      }
+    }
+
     /*
     stage('Publishing to dockerhub'){
       agent {label 'docker'}
