@@ -18,9 +18,11 @@ pipeline {
         dir("${env.WORKSPACE}/src"){
           sh 'go build -o http-dump main.go'
         }
+        sh 'printenv'
       }
+
     }
-     
+    /*
     stage('Publishing to dockerhub'){
       agent {label 'docker'}
       stages {
@@ -48,5 +50,6 @@ pipeline {
         }
       }
     }
+    */
   }
 }
