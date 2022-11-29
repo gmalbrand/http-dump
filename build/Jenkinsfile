@@ -52,4 +52,9 @@ pipeline {
     }
     */
   }
+  post {
+      always{
+          emailext body: '$DEFAULT_CONTENT', subject: '[Jenkins] $DEFAULT_SUBJECT', to: '$DEFAULT_RECIPIENTS'
+      }
+  }
 }
