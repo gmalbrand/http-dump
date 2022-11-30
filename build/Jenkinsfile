@@ -26,10 +26,10 @@ pipeline {
       agent {label 'docker'}
       steps {
           withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'docker_pwd', usernameVariable: 'docker_user')]) {
-              sh 'echo "$docker_pwd" | docker login -u $docker_user --password-stdin'
+            sh 'echo "$docker_pwd" | docker login -u $docker_user --password-stdin'
+            sh 'DOCKER_CRED="$docker_pwd" docker buildx build --push --secret id="$DOCKER_CRED" -t "$REPOSITORY:$BRANCH_NAME-$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
+            sh 'docker logout'
           }
-          sh 'DOCKER_CRED="$docker_pwd" docker buildx build --push --secret id="$DOCKER_CRED" -t "$REPOSITORY:$BRANCH_NAME-$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
-          sh 'docker logout'
       }
     }
     
