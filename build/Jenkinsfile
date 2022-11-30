@@ -21,8 +21,6 @@ pipeline {
         }
       }
     }
-
-    
     stage('Publish to dockerhub'){
       agent {label 'docker'}
       steps {
