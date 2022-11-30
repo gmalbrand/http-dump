@@ -20,7 +20,6 @@ pipeline {
           sh 'printenv'
         }
       }
-
     }
 
     
@@ -28,7 +27,7 @@ pipeline {
       agent {label 'docker'}
       steps {
           withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'docker_pwd', usernameVariable: 'docker_user')]) {
-              sh 'docker login -u $docker_user -p $docker_pwd'
+              sh 'echo "$docker_pwd" | docker login -u $docker_user --password-stdin'
           }
           sh 'docker buildx build --push -t "$REPOSITORY:$BRANCH_NAME-$BUILD_NUMBER" -t $REPOSITORY:latest --platform "linux/amd64,linux/arm64" -f build/Dockerfile .' 
           sh 'docker logout'
