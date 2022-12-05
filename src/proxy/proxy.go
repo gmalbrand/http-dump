@@ -36,7 +36,7 @@ func deleteHopHeader(req *http.Request){
 }
 
 func addForwardHeader(req *http.Request){
-	req.Header.Add("X-Forward-For", getRemoteAddress(req))	
+	req.Header.Add("X-Forwarded-For", getRemoteAddress(req))	
 }
 
 func copyHeader(src, dst http.Header){
