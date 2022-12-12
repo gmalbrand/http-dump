@@ -21,10 +21,10 @@ spec:
         prometheus.io/app-metrics-path: '/metrics'
         k8s.monitor.config.scalyr.com/scrape: 'true'
         log.config.scalyr.com/attributes.parser: accessLog
-        k8s.monitor.config.scalyr.com/scrape_interval: '5'
+        k8s.monitor.config.scalyr.com/scrape_interval: '3s'
     spec:
       containers:
-      - image: gmalbrand/http-dump:latest
+      - image: gmalbrand/http-dump:master-47
         name: http-dump
         imagePullPolicy: Always
         ports:
