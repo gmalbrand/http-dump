@@ -43,6 +43,7 @@ func info(w http.ResponseWriter, req *http.Request) {
 
 func main() {
 	// Get parameters
+	// Just add comment to have a new commit/push
 	port, err := strconv.Atoi(os.Getenv("HTTP_SERVER_PORT"))
 	log.SetFlags(0)
 
