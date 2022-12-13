@@ -28,13 +28,13 @@ func (gen *LoadGenerator) GenerateCPULoad(w http.ResponseWriter, req *http.Reque
 	duration := time.Duration(10 * time.Second)
 
 	if v := req.URL.Query().Get("load"); v != "" {
-		if l, err := strconv.Atoi(v); err != nil {
+		if l, err := strconv.Atoi(v); err == nil {
 			load = l
 		}
 	}
 
 	if v := req.URL.Query().Get("duration"); v != "" {
-		if d, err := time.ParseDuration(v); err != nil {
+		if d, err := time.ParseDuration(v); err == nil {
 			duration = d
 		}
 	}
@@ -63,7 +63,7 @@ func (gen *LoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Reque
 	duration := time.Duration(10 * time.Second)
 
 	if v := req.URL.Query().Get("size"); v != "" {
-		if l, err := strconv.Atoi(v); err != nil {
+		if l, err := strconv.Atoi(v); err == nil {
 			size = uint64(l)
 		}
 	}
@@ -74,7 +74,7 @@ func (gen *LoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Reque
 	total := (memStats.Sys - memStats.Mallocs) * size / 100
 
 	if v := req.URL.Query().Get("duration"); v != "" {
-		if d, err := time.ParseDuration(v); err != nil {
+		if d, err := time.ParseDuration(v); err == nil {
 			duration = d
 		}
 	}

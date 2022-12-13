@@ -6,7 +6,7 @@ metadata:
     app: http-dump
   name: http-dump
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: http-dump
@@ -21,7 +21,8 @@ spec:
         prometheus.io/app-metrics-path: '/metrics'
         k8s.monitor.config.scalyr.com/scrape: 'true'
         log.config.scalyr.com/attributes.parser: accessLog
-        k8s.monitor.config.scalyr.com/scrape_interval: '3s'
+        k8s.monitor.config.scalyr.com/scrape_interval: '1'
+        k8s.monitor.config.scalyr.com/attributes: '{"namespace": "http-dump", "app": "${pod_labels_app}", "image": "gmalbrand/http-dump:master-50"}'
     spec:
       containers:
       - image: gmalbrand/http-dump:latest
