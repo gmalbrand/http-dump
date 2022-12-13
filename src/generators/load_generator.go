@@ -2,7 +2,7 @@ package generators
 
 import (
 	"context"
-	"log"
+	"math"
 	"net/http"
 	"runtime"
 	"strconv"
@@ -10,20 +10,55 @@ import (
 	"time"
 )
 
-type MemLoadGenerator struct {
+type LoadGenerator struct {
 	wg      sync.WaitGroup
 	context context.Context
 	cancel  context.CancelFunc
 }
 
-func NewMemLoadGenerator() *MemLoadGenerator {
-	res := &MemLoadGenerator{}
+func NewLoadGenerator() *LoadGenerator {
+	res := &LoadGenerator{}
 	res.wg = sync.WaitGroup{}
 	res.context, res.cancel = context.WithCancel(context.Background())
 	return res
 }
 
-func (gen *MemLoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Request) {
+func (gen *LoadGenerator) GenerateCPULoad(w http.ResponseWriter, req *http.Request) {
+	load := 100
+	duration := time.Duration(10 * time.Second)
+
+	if v := req.URL.Query().Get("load"); v != "" {
+		if l, err := strconv.Atoi(v); err != nil {
+			load = l
+		}
+	}
+
+	if v := req.URL.Query().Get("duration"); v != "" {
+		if d, err := time.ParseDuration(v); err != nil {
+			duration = d
+		}
+	}
+
+	wait := time.After(duration)
+
+	gen.wg.Add(1)
+	go func() {
+		defer gen.wg.Done()
+		for {
+			select {
+			case <-gen.context.Done():
+				return
+			case <-wait:
+				return
+			default:
+				math.Floor(3802920393940938382)
+				time.Sleep(time.Duration((100-load)/runtime.NumCPU()) * time.Microsecond)
+			}
+		}
+	}()
+}
+
+func (gen *LoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Request) {
 	var size uint64 = 80
 	duration := time.Duration(10 * time.Second)
 
@@ -35,10 +70,8 @@ func (gen *MemLoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Re
 
 	memStats := runtime.MemStats{}
 	runtime.ReadMemStats(&memStats)
-	log.Printf("Fee mem: %v MiB", memStats.Sys)
 
 	total := (memStats.Sys - memStats.Mallocs) * size / 100
-	log.Printf("Mem to consume: %d MiB", total)
 
 	if v := req.URL.Query().Get("duration"); v != "" {
 		if d, err := time.ParseDuration(v); err != nil {
@@ -70,7 +103,7 @@ func (gen *MemLoadGenerator) GenerateMemLoad(w http.ResponseWriter, req *http.Re
 	}()
 }
 
-func (gen *MemLoadGenerator) Wait() {
+func (gen *LoadGenerator) Wait() {
 	gen.cancel()
 	gen.wg.Wait()
 }

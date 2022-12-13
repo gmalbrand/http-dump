@@ -24,7 +24,7 @@ spec:
         k8s.monitor.config.scalyr.com/scrape_interval: '3s'
     spec:
       containers:
-      - image: gmalbrand/http-dump:master-47
+      - image: gmalbrand/http-dump:latest
         name: http-dump
         imagePullPolicy: Always
         ports:

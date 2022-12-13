@@ -54,7 +54,7 @@ func main() {
 		version = defaultVersion
 	}
 
-	cpuLoadGen := generators.NewCpuLoadGenerator()
+	LoadGenerator := generators.NewLoadGenerator()
 	//memLoadGen := generators.NewMemLoadGenerator()
 
 	mux := monitoring.NewMonitoredMux()
@@ -62,10 +62,9 @@ func main() {
 	mux.HandleFunc("/", proxy.ProxyHandler)
 	mux.HandleFunc("/dump", dumpRequest)
 	mux.HandleFunc("/info", info)
-	mux.HandleFunc("/cpuLoad", cpuLoadGen.GenerateCPULoad)
-	//mux.HandleFunc("/memLoad", memLoadGen.GenerateMemLoad)
+	mux.HandleFunc("/cpuLoad", LoadGenerator.GenerateCPULoad)
+	mux.HandleFunc("/memLoad", LoadGenerator.GenerateMemLoad)
 	fmt.Printf("Serving requests on port %d\n", port)
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), logger.AccessCombinedLog(mux.Server())))
-	cpuLoadGen.Wait()
-	//memLoadGen.Wait()
+	LoadGenerator.Wait()
 }
